@@ -1,43 +1,45 @@
 #pragma once
 
 #include <iostream>
-
+template <typename T>
 struct node {
-	int data;
+	T data;
 	struct node* next;
 };
 
+template <typename T>
 class hash_node {
 public:
 	hash_node() : head(nullptr), count(0)	{}
 	void set_key(const int _key) { key = _key; }
 
-	void insert_data(const int data)
+	void insert_data(const T data)
 	{
 		// 처음 삽입된 데이터 예외처리
 		if (head == nullptr)
 		{
-			head = new node;
+			head = new node<T>;
 			head->next = nullptr;
 			head->data = data;
 			return;
 		}
 		// 새로운 노드 할당 및 데이터 저장
-		node* insert = new node;
+		node<T>* insert = new node<T>;
 		insert->next = nullptr;
 		insert->data = data;
 		// 마지막 노드 탐색
-		node* cur = head;
+		node<T>* cur = head;
 		while (cur->next)
 		{
 			cur = cur->next;
 		}
 		// 마지막 노드 연결
 		cur->next = insert;
+		count++;
 	}
 	void print()
 	{
-		node* temp = head;
+		node<T>* temp = head;
 		while (temp)
 		{
 			std::cout << temp->data << ",  ";
@@ -53,14 +55,14 @@ private:
 	
 	int key;
 	int count;
-	node* head;
+	node<T>* head;
 };
-
+template <typename T>
 class hash_map {
 public :
 	hash_map(int _hash_size) : hash_size(_hash_size)
 	{
-		table = new hash_node[hash_size];
+		table = new hash_node<T>[hash_size];
 		for (int i = 0; i < hash_size; i++)
 		{
 			table[i].set_key(i);			
@@ -73,7 +75,7 @@ public :
 		return rtn;
 	}
 
-	void insert(const int data)
+	void insert(const T data)
 	{
 		int key = get_key(data);
 		table[key].insert_data(data);
@@ -95,6 +97,6 @@ public :
 private :
 	int hash_size;		// 생성할 해쉬 개수
 	int num_of_data;	// 저장되어있는 데이터 개수
-	hash_node* table;
+	hash_node<T>* table;
 };
 
